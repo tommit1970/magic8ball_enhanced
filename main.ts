@@ -17,22 +17,17 @@ input.onButtonPressed(Button.B, function () {
     basic.clearScreen()
 })
 input.onGesture(Gesture.Shake, function () {
+    OLED.clear()
     tilfeldigValg = tilbakeMeldingsAlternativene._pickRandom()
     if (tilfeldigValg == "neutral") {
         tilfeldigTall = randint(0, neutrals.length - 1)
-        basic.showString("" + (neutrals[tilfeldigTall]))
-        basic.pause(200)
-        basic.clearScreen()
+        OLED.writeStringNewLine(neutrals[tilfeldigTall])
     } else if (tilfeldigValg == "negative") {
         tilfeldigTall = randint(0, negatives.length - 1)
-        basic.showString("" + (negatives[tilfeldigTall]))
-        basic.pause(200)
-        basic.clearScreen()
+        OLED.writeStringNewLine(negatives[tilfeldigTall])
     } else if (tilfeldigValg == "positive") {
         tilfeldigTall = randint(0, positives.length - 1)
-        basic.showString("" + (positives[tilfeldigTall]))
-        basic.pause(200)
-        basic.clearScreen()
+        OLED.writeStringNewLine(positives[tilfeldigTall])
     }
     if (tilbakeMeldingsAlternativene.length >= 4) {
         tilbakeMeldingsAlternativene.pop()
@@ -41,13 +36,24 @@ input.onGesture(Gesture.Shake, function () {
         basic.clearScreen()
     }
 })
+function setLists () {
+    neutrals = ["Det kan skje", "Vet ikke", "Muligens"]
+    positives = ["Absolutt", "Ja", "Helt sikkert"]
+    negatives = ["Nei", "Aldri", "Beklager"]
+    tilbakeMeldingsAlternativene = ["positive", "neutral", "negative"]
+}
+let positives: string[] = []
+let negatives: string[] = []
+let neutrals: string[] = []
 let tilfeldigTall = 0
 let tilfeldigValg = ""
 let tilbakeMeldingsAlternativene: string[] = []
-let negatives: string[] = []
-let positives: string[] = []
-let neutrals: string[] = []
-neutrals = ["0", "z", "x"]
-positives = ["1", "2", "3"]
-negatives = ["m", "n", "-"]
-tilbakeMeldingsAlternativene = ["positive", "neutral", "negative"]
+setLists()
+let barHeight = 0
+OLED.init(128, 64)
+for (let index = 0; index < 10; index++) {
+    barHeight += 10
+    basic.pause(100)
+    OLED.drawLoading(barHeight)
+}
+OLED.clear()
